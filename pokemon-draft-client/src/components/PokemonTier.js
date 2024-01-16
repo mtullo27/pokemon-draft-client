@@ -9,6 +9,7 @@ import {
     TableRow,
     Paper
 } from "@mui/material"
+import PokemonCard from "./PokemonCard"
 
 const PokemonTier = ({ targetPoints }) => {
     const [pokemonData, setPokemonData] = useState([])
@@ -16,7 +17,7 @@ const PokemonTier = ({ targetPoints }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(``)
+                const response = await axios.get()
                 const values = response.data.values
 
                 // Assuming the first row contains headers
@@ -72,22 +73,13 @@ const PokemonTier = ({ targetPoints }) => {
                     {pokemonData.map((pokemon, index) => (
                         <TableRow key={index}>
                             <TableCell>
-                                <img
-                                    src={constructPicURL(pokemon.Pokemon)}
-                                    alt={pokemon.Pokemon}
-                                    style={{ marginRight: "8px" }}
+                                <PokemonCard
+                                    pokemon={pokemon.Pokemon}
+                                    imageUrl={constructPicURL(pokemon?.Pokemon)}
+                                    smogonUrl={constructSmogonURL(
+                                        pokemon?.Pokemon
+                                    )}
                                 />
-                                <a
-                                    href={constructSmogonURL(pokemon.Pokemon)}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    style={{
-                                        textDecoration: "none",
-                                        color: "inherit"
-                                    }}
-                                >
-                                    {pokemon.Pokemon}
-                                </a>
                             </TableCell>
                         </TableRow>
                     ))}
