@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from "react"
 import axios from "axios"
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Paper
+} from "@mui/material"
 
 const PokemonTier = ({ targetPoints }) => {
     const [pokemonData, setPokemonData] = useState([])
@@ -7,9 +16,7 @@ const PokemonTier = ({ targetPoints }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(
-                    `https://sheets.googleapis.com/v4/spreadsheets/12jDAuNvID0fuF2PT4Jmwkbhax97mFcvrcHF-wDK3Snc/values/Data?key=AIzaSyC4emN9L0v7jsh_aqsQ1LFNJ6XjOzal358`
-                )
+                const response = await axios.get(``)
                 const values = response.data.values
 
                 // Assuming the first row contains headers
@@ -48,25 +55,45 @@ const PokemonTier = ({ targetPoints }) => {
         const formattedName = pokemonName.toLowerCase().replace(" ", "-")
         return `https://www.smogon.com/dex/sv/pokemon/${formattedName}`
     }
+    const constructPicURL = (pokemonName) => {
+        const formattedName = pokemonName.toLowerCase().replace(" ", "-")
+        return `https://www.smogon.com/dex/media/sprites/xy/${formattedName}.gif`
+    }
 
     return (
-        <div>
-            <h2>{targetPoints} Points</h2>
-            <ul>
-                {pokemonData.map((pokemon, index) => (
-                    <li key={index}>
-                        <a
-                            href={constructSmogonURL(pokemon.Pokemon)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={{ textDecoration: "none", color: "inherit" }}
-                        >
-                            {pokemon.Pokemon}
-                        </a>
-                    </li>
-                ))}
-            </ul>
-        </div>
+        <TableContainer component={Paper}>
+            <Table>
+                <TableHead>
+                    <TableRow>
+                        <TableCell>{targetPoints} Points</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {pokemonData.map((pokemon, index) => (
+                        <TableRow key={index}>
+                            <TableCell>
+                                <img
+                                    src={constructPicURL(pokemon.Pokemon)}
+                                    alt={pokemon.Pokemon}
+                                    style={{ marginRight: "8px" }}
+                                />
+                                <a
+                                    href={constructSmogonURL(pokemon.Pokemon)}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{
+                                        textDecoration: "none",
+                                        color: "inherit"
+                                    }}
+                                >
+                                    {pokemon.Pokemon}
+                                </a>
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+        </TableContainer>
     )
 }
 
