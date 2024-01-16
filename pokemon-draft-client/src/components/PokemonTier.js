@@ -17,7 +17,7 @@ const PokemonTier = ({ targetPoints }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get()
+                const response = await axios.get(``)
                 const values = response.data.values
 
                 // Assuming the first row contains headers
@@ -75,7 +75,9 @@ const PokemonTier = ({ targetPoints }) => {
                             <TableCell>
                                 <PokemonCard
                                     pokemon={pokemon.Pokemon}
-                                    imageUrl={constructPicURL(pokemon?.Pokemon)}
+                                    imageUrl={constructPicURL(
+                                        pokemon?.SmogonName
+                                    )}
                                     smogonUrl={constructSmogonURL(
                                         pokemon?.Pokemon
                                     )}

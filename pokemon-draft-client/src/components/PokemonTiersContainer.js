@@ -7,16 +7,26 @@ const PokemonTiersContainer = () => {
     const tiers = [...Array(19).keys()].reverse()
 
     return (
-        <div style={{ overflowX: "auto", overflowY: "hidden" }}>
+        <div
+            style={{
+                overflowX: "auto",
+                overflowY: "hidden",
+                textAlign: "center"
+            }}
+        >
+            <Typography variant="h4" component="div" gutterBottom>
+                Pokemon Tiers
+            </Typography>
             <Container
                 maxWidth="xl"
                 className="pokemon-tiers-scroll-container"
-                style={{}}
+                style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    overflowX: "auto",
+                    overflowY: "hidden"
+                }}
             >
-                <Typography variant="h4" component="div" gutterBottom>
-                    Pokemon Tiers
-                </Typography>
-
                 <Grid container spacing={2} style={{ flexWrap: "nowrap" }}>
                     {tiers.map((tier, index) => (
                         <Grid
