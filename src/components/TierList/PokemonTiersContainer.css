@@ -1,0 +1,48 @@
+.pokemon-tiers-container {
+    display: flex;
+    flex-direction: row; /* Render from right to left */
+    flex-wrap: wrap; /* Allow wrapping to the next line */
+    justify-content: flex-start; /* Align to the start of the row */
+    margin-right: 20px;
+  }
+  
+/* Add this style to your PokemonTiersContainer.css file */
+.pokemon-tiers-scroll-container {
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth; /* Optional: Add smooth scrolling */
+  scrollbar-width: thin; /* Optional: Customize the scrollbar width */
+  scrollbar-color: transparent transparent; /* Optional: Customize the scrollbar color */
+  position: relative; /* Add relative positioning */
+}
+
+/* Add this style to create a pseudo-element for the scrollbar */
+.pokemon-tiers-scroll-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 12px; /* Optional: Adjust the scrollbar height */
+  background-color: transparent;
+  z-index: 1; /* Ensure it is above the content */
+}
+
+/* Add this style to reverse the scrollbar position */
+.pokemon-tiers-scroll-container::-webkit-scrollbar {
+  height: 12px; /* Optional: Adjust the scrollbar height */
+  width: 100%; /* Make the scrollbar full-width */
+}
+
+.pokemon-tiers-scroll-container::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
+.pokemon-tiers-scroll-container::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.pokemon-tiers-scroll-container:hover::-webkit-scrollbar-thumb {
+  background-color: #888; /* Optional: Change the hover color */
+}

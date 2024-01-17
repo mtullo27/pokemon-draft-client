@@ -7,17 +7,21 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-    Paper
+    Paper,
+    Typography
 } from "@mui/material"
 import PokemonCard from "./PokemonCard"
 
-const PokemonTier = ({ targetPoints }) => {
+const PokemonTier = ({ targetPoints, color }) => {
     const [pokemonData, setPokemonData] = useState([])
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(``)
+                const apiKey = process.env.REACT_APP_GOOGLE_SHEETS_API_KEY
+                const response = await axios.get(
+                    `https://sheets.googleapis.com/v4/spreadsheets/1E3wHnKj8i4C40Lj7SwKcVrbPhOFUdzNkJnpGuTwe73I/values/Data?key=${apiKey}`
+                )
                 const values = response.data.values
 
                 // Assuming the first row contains headers
@@ -62,17 +66,27 @@ const PokemonTier = ({ targetPoints }) => {
     }
 
     return (
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} style={{ backgroundColor: color }}>
             <Table>
                 <TableHead>
                     <TableRow>
-                        <TableCell>{targetPoints} Points</TableCell>
+                        <TableCell align="center" size="small">
+                            <Typography variant="h6" fontWeight="bold">
+                                {targetPoints} Points
+                            </Typography>
+                        </TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {pokemonData.map((pokemon, index) => (
-                        <TableRow key={index}>
-                            <TableCell>
+                        <TableRow
+                            key={index}
+                            style={{
+                                backgroundColor:
+                                    pokemon?.Drafted === "x" ? "white" : color
+                            }}
+                        >
+                            <TableCell size="small">
                                 <PokemonCard
                                     pokemon={pokemon.Pokemon}
                                     imageUrl={constructPicURL(
@@ -81,6 +95,8 @@ const PokemonTier = ({ targetPoints }) => {
                                     smogonUrl={constructSmogonURL(
                                         pokemon?.Pokemon
                                     )}
+                                    drafted={pokemon?.Drafted}
+                                    color={color}
                                 />
                             </TableCell>
                         </TableRow>

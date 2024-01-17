@@ -11,3 +11,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #343541; /* Set your desired background color */
+}
+
+#root {
+  height: 100vh; /* Optionally, set the height of the root element */
+}

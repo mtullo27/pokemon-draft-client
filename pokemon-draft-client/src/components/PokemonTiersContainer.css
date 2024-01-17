@@ -1,8 +1,0 @@
-.pokemon-tiers-container {
-    display: flex;
-    flex-direction: row; /* Render from right to left */
-    flex-wrap: wrap; /* Allow wrapping to the next line */
-    justify-content: flex-start; /* Align to the start of the row */
-    margin-right: 20px;
-  }
-  
