@@ -10,9 +10,9 @@ import {
     Paper,
     Typography
 } from "@mui/material"
-import PokemonCard from "./PokemonCard"
+import PokemonCard from "../TierList/PokemonCard"
 
-const PokemonTier = ({ targetPoints, color }) => {
+const TeamBoxHorizontal = ({ coach, color }) => {
     const [pokemonData, setPokemonData] = useState([])
 
     useEffect(() => {
@@ -39,78 +39,69 @@ const PokemonTier = ({ targetPoints, color }) => {
 
                 // Filter out rows with empty or non-numeric Pts values
                 const filteredData = mappedData.filter(
-                    (row) => !isNaN(row["Pts"])
+                    (row) => row["Coach"] == coach
                 )
 
-                // Filter rows based on the target point value
-                const targetData = filteredData.filter(
-                    (row) => row["Pts"] == targetPoints
-                )
-
-                setPokemonData(targetData)
+                setPokemonData(filteredData)
             } catch (error) {
                 console.error("Error fetching data from Google Sheets:", error)
             }
         }
 
         fetchData()
-    }, [targetPoints])
+    }, [coach])
 
     const constructSmogonURL = (pokemonName) => {
-        const formattedName = pokemonName?.toLowerCase().replace(" ", "-")
+        const formattedName = pokemonName.toLowerCase().replace(" ", "-")
         return `https://www.smogon.com/dex/sv/pokemon/${formattedName}`
     }
     const constructPicURL = (pokemonNumber, pokemonName) => {
         const numericPokemonNumber = parseInt(pokemonNumber, 10)
         if (numericPokemonNumber < 1000) {
-            const formattedNumber = String(pokemonNumber).padStart(4, "0")
+            const formattedNumber = String(numericPokemonNumber).padStart(
+                4,
+                "0"
+            )
             return `https://projectpokemon.org/images/sprites-models/sv-sprites-home/${formattedNumber}.png`
         } else {
             const formattedName = pokemonName.toLowerCase().replace(" ", "-")
             return `https://www.smogon.com/dex/media/sprites/xy/${formattedName}.gif`
         }
     }
+
     return (
         <TableContainer component={Paper} style={{ backgroundColor: color }}>
             <Table>
                 <TableHead>
                     <TableRow>
-                        <TableCell align="center" size="small">
-                            <Typography variant="h6" fontWeight="bold">
-                                {targetPoints} Points
-                            </Typography>
-                        </TableCell>
+                        {pokemonData
+                            .sort((a, b) => b.Pts - a.Pts)
+                            .map((pokemon, index) => (
+                                <TableCell
+                                    key={index}
+                                    align="center"
+                                    size="small"
+                                >
+                                    <PokemonCard
+                                        pokemon={pokemon.Pokemon}
+                                        imageUrl={constructPicURL(
+                                            pokemon?.Number,
+                                            pokemon?.SmogonName
+                                        )}
+                                        smogonUrl={constructSmogonURL(
+                                            pokemon?.Pokemon
+                                        )}
+                                        drafted={pokemon?.Drafted}
+                                        color={color}
+                                        team={true}
+                                    />
+                                </TableCell>
+                            ))}
                     </TableRow>
                 </TableHead>
-                <TableBody>
-                    {pokemonData.map((pokemon, index) => (
-                        <TableRow
-                            key={index}
-                            style={{
-                                backgroundColor:
-                                    pokemon?.Drafted === "x" ? "white" : color
-                            }}
-                        >
-                            <TableCell size="small">
-                                <PokemonCard
-                                    pokemon={pokemon.Pokemon}
-                                    imageUrl={constructPicURL(
-                                        pokemon?.Number,
-                                        pokemon?.SmogonName
-                                    )}
-                                    smogonUrl={constructSmogonURL(
-                                        pokemon?.Pokemon
-                                    )}
-                                    drafted={pokemon?.Drafted}
-                                    color={color}
-                                />
-                            </TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
             </Table>
         </TableContainer>
     )
 }
 
-export default PokemonTier
+export default TeamBoxHorizontal

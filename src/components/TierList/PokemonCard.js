@@ -15,7 +15,11 @@ const PokemonCard = ({
             style={{
                 display: "flex",
                 alignItems: "center",
-                backgroundColor: drafted === "x" ? "white" : color
+                backgroundColor: team
+                    ? color
+                    : drafted === "x"
+                    ? "white"
+                    : color
             }}
         >
             <PokemonPicture

@@ -7,7 +7,7 @@ const PokemonTiersContainer = () => {
     const tiers = [...Array(19).keys()].reverse()
 
     const getRainbowColor = (index) => {
-        const frequency = 0.1 // Adjust this value for a smoother or more vibrant rainbow
+        const frequency = 0.5 // Adjust this value for a smoother or more vibrant rainbow
         const red = Math.sin(frequency * (255 - index) + 0) * 127 + 128
         const green = Math.sin(frequency * (255 - index) + 2) * 127 + 128
         const blue = Math.sin(frequency * (255 - index) + 4) * 127 + 128
@@ -22,9 +22,6 @@ const PokemonTiersContainer = () => {
                 textAlign: "center"
             }}
         >
-            <Typography variant="h4" component="div" gutterBottom>
-                Pokemon Tiers
-            </Typography>
             <Container
                 maxWidth="xl"
                 className="pokemon-tiers-scroll-container"

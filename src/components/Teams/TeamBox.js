@@ -55,9 +55,18 @@ const TeamBox = ({ coach, color }) => {
         const formattedName = pokemonName.toLowerCase().replace(" ", "-")
         return `https://www.smogon.com/dex/sv/pokemon/${formattedName}`
     }
-    const constructPicURL = (pokemonName) => {
-        const formattedName = pokemonName.toLowerCase().replace(" ", "-")
-        return `https://www.smogon.com/dex/media/sprites/xy/${formattedName}.gif`
+    const constructPicURL = (pokemonNumber, pokemonName) => {
+        const numericPokemonNumber = parseInt(pokemonNumber, 10)
+        if (numericPokemonNumber < 1000) {
+            const formattedNumber = String(numericPokemonNumber).padStart(
+                4,
+                "0"
+            )
+            return `https://projectpokemon.org/images/sprites-models/sv-sprites-home/${formattedNumber}.png`
+        } else {
+            const formattedName = pokemonName.toLowerCase().replace(" ", "-")
+            return `https://www.smogon.com/dex/media/sprites/xy/${formattedName}.gif`
+        }
     }
 
     return (
@@ -73,29 +82,32 @@ const TeamBox = ({ coach, color }) => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {pokemonData.map((pokemon, index) => (
-                        <TableRow
-                            key={index}
-                            style={{
-                                backgroundColor: color
-                            }}
-                        >
-                            <TableCell size="small">
-                                <PokemonCard
-                                    pokemon={pokemon.Pokemon}
-                                    imageUrl={constructPicURL(
-                                        pokemon?.SmogonName
-                                    )}
-                                    smogonUrl={constructSmogonURL(
-                                        pokemon?.Pokemon
-                                    )}
-                                    drafted={pokemon?.Drafted}
-                                    color={color}
-                                    team={true}
-                                />
-                            </TableCell>
-                        </TableRow>
-                    ))}
+                    {pokemonData
+                        .sort((a, b) => b.Pts - a.Pts)
+                        .map((pokemon, index) => (
+                            <TableRow
+                                key={index}
+                                style={{
+                                    backgroundColor: color
+                                }}
+                            >
+                                <TableCell size="small">
+                                    <PokemonCard
+                                        pokemon={pokemon.Pokemon}
+                                        imageUrl={constructPicURL(
+                                            pokemon?.Number,
+                                            pokemon?.SmogonName
+                                        )}
+                                        smogonUrl={constructSmogonURL(
+                                            pokemon?.Pokemon
+                                        )}
+                                        drafted={pokemon?.Drafted}
+                                        color={color}
+                                        team={true}
+                                    />
+                                </TableCell>
+                            </TableRow>
+                        ))}
                 </TableBody>
             </Table>
         </TableContainer>

@@ -18,10 +18,15 @@ import { makeStyles } from "@mui/styles"
 
 import PokemonTiersPage from "./components/TierList/PokemonTiersPage"
 import TeamsPage from "./components/Teams/TeamsPage"
+import UserPage from "./components/User/UserPage"
+import LoginForm from "./components/Login/LoginForm"
+
+import PokemonTable from "./server/PokemonTable"
 
 import DashboardIcon from "@mui/icons-material/Dashboard"
 import HomeIcon from "@mui/icons-material/Home"
 import GroupIcon from "@mui/icons-material/Group"
+import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted"
 
 const drawerWidth = 240
 
@@ -43,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
     },
     content: {
         flexGrow: 1,
-        paddingTop: "24px",
+        paddingTop: "64px",
         paddingLeft: "8px"
     }
 }))
@@ -56,9 +61,19 @@ function App() {
     const classes = useStyles()
 
     const [drawerOpen, setDrawerOpen] = useState(false)
+    const [loginOpen, setLoginOpen] = useState(false)
+    const [loggedInUser, setLoggedInUser] = useState(null)
 
     const toggleDrawer = () => {
         setDrawerOpen(!drawerOpen)
+    }
+
+    const handleLoginClick = () => {
+        setLoginOpen(true)
+    }
+
+    const handleLogin = (username) => {
+        setLoggedInUser(username)
     }
 
     return (
@@ -71,16 +86,30 @@ function App() {
                 >
                     <Toolbar style={{ justifyContent: "space-between" }}>
                         <Typography variant="h6" noWrap>
-                            Pokemon Drafting Tool
+                            {loggedInUser
+                                ? `Welcome, ${loggedInUser}!`
+                                : "Pokemon Drafting Tool"}
                         </Typography>
-                        <IconButton
-                            size="large"
-                            edge="end"
-                            color="inherit"
-                            onClick={toggleDrawer}
-                        >
-                            <MenuIcon />
-                        </IconButton>
+                        {!loggedInUser && (
+                            <IconButton
+                                size="large"
+                                edge="end"
+                                color="inherit"
+                                onClick={handleLoginClick}
+                            >
+                                Login
+                            </IconButton>
+                        )}
+                        {loggedInUser && (
+                            <IconButton
+                                size="large"
+                                edge="end"
+                                color="inherit"
+                                onClick={toggleDrawer}
+                            >
+                                <MenuIcon />
+                            </IconButton>
+                        )}
                     </Toolbar>
                 </AppBar>
 
@@ -100,6 +129,12 @@ function App() {
                             </ListItemIcon>
                             <ListItemText primary="Home" />
                         </ListItem>
+                        <ListItem button component={Link} to="/user">
+                            <ListItemIcon>
+                                <GroupIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="User" />
+                        </ListItem>
                         <ListItem button component={Link} to="/tiers">
                             <ListItemIcon>
                                 <DashboardIcon />
@@ -108,7 +143,7 @@ function App() {
                         </ListItem>
                         <ListItem button component={Link} to="/teams">
                             <ListItemIcon>
-                                <GroupIcon />
+                                <FormatListBulletedIcon />
                             </ListItemIcon>
                             <ListItemText primary="Teams" />
                         </ListItem>
@@ -120,8 +155,15 @@ function App() {
                         <Route path="/" element={<HomePage />} />
                         <Route path="/tiers" element={<PokemonTiersPage />} />
                         <Route path="/teams" element={<TeamsPage />} />
+                        <Route path="/user" element={<UserPage />} />
+                        <Route path="/data" element={<PokemonTable />} />
                     </Routes>
                 </Box>
+                <LoginForm
+                    open={loginOpen}
+                    onClose={() => setLoginOpen(false)}
+                    onLogin={handleLogin}
+                />
             </Router>
         </div>
     )
