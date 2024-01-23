@@ -1,9 +1,14 @@
-import React from "react"
+import React, { useEffect } from "react"
+import { useSelector, useDispatch } from "react-redux"
 import PokemonTier from "./PokemonTier"
 import { Grid, Paper, Container, Typography } from "@mui/material"
 import "./PokemonTiersContainer.css" // Import the CSS file
+import { getAllPokemon } from "../../actions/pokemonActions"
 
 const PokemonTiersContainer = () => {
+    const dispatch = useDispatch()
+    const pokemon = useSelector((state) => state.allPokemon)
+
     const tiers = [...Array(19).keys()].reverse()
 
     const getRainbowColor = (index) => {
@@ -13,7 +18,17 @@ const PokemonTiersContainer = () => {
         const blue = Math.sin(frequency * (255 - index) + 4) * 127 + 128
         return `rgb(${red}, ${green}, ${blue})`
     }
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                await dispatch(getAllPokemon())
+            } catch (error) {
+                console.error("Error fetching data from server:", error)
+            }
+        }
 
+        fetchData()
+    }, [dispatch, pokemon?.length])
     return (
         <div
             style={{

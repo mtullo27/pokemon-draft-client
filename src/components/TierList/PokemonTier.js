@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react"
-import axios from "axios"
+import React from "react"
+import { useSelector, useDispatch } from "react-redux"
 import {
     Table,
     TableBody,
@@ -13,48 +13,7 @@ import {
 import PokemonCard from "./PokemonCard"
 
 const PokemonTier = ({ targetPoints, color }) => {
-    const [pokemonData, setPokemonData] = useState([])
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const apiKey = process.env.REACT_APP_GOOGLE_SHEETS_API_KEY
-                const response = await axios.get(
-                    `https://sheets.googleapis.com/v4/spreadsheets/1E3wHnKj8i4C40Lj7SwKcVrbPhOFUdzNkJnpGuTwe73I/values/Data?key=${apiKey}`
-                )
-                const values = response.data.values
-
-                // Assuming the first row contains headers
-                const headers = values[0]
-                const data = values.slice(1)
-
-                // Map the data before filtering and sorting
-                const mappedData = data.map((row) => {
-                    const pokemon = {}
-                    headers.forEach((header, index) => {
-                        pokemon[header] = row[index]
-                    })
-                    return pokemon
-                })
-
-                // Filter out rows with empty or non-numeric Pts values
-                const filteredData = mappedData.filter(
-                    (row) => !isNaN(row["Pts"])
-                )
-
-                // Filter rows based on the target point value
-                const targetData = filteredData.filter(
-                    (row) => row["Pts"] == targetPoints
-                )
-
-                setPokemonData(targetData)
-            } catch (error) {
-                console.error("Error fetching data from Google Sheets:", error)
-            }
-        }
-
-        fetchData()
-    }, [targetPoints])
+    const allPokemon = useSelector((state) => state.pokemon.allPokemon)
 
     const constructSmogonURL = (pokemonName) => {
         const formattedName = pokemonName?.toLowerCase().replace(" ", "-")
@@ -83,30 +42,35 @@ const PokemonTier = ({ targetPoints, color }) => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {pokemonData.map((pokemon, index) => (
-                        <TableRow
-                            key={index}
-                            style={{
-                                backgroundColor:
-                                    pokemon?.Drafted === "x" ? "white" : color
-                            }}
-                        >
-                            <TableCell size="small">
-                                <PokemonCard
-                                    pokemon={pokemon.Pokemon}
-                                    imageUrl={constructPicURL(
-                                        pokemon?.Number,
-                                        pokemon?.SmogonName
-                                    )}
-                                    smogonUrl={constructSmogonURL(
-                                        pokemon?.Pokemon
-                                    )}
-                                    drafted={pokemon?.Drafted}
-                                    color={color}
-                                />
-                            </TableCell>
-                        </TableRow>
-                    ))}
+                    {allPokemon
+                        .filter((pokemon) => pokemon.Pts === targetPoints)
+                        ?.map((pokemon, index) => (
+                            <TableRow
+                                key={index}
+                                style={{
+                                    backgroundColor: pokemon?.CoachID
+                                        ? "white"
+                                        : color
+                                }}
+                            >
+                                <TableCell size="small">
+                                    <PokemonCard
+                                        pokemon={pokemon.Pokemon}
+                                        imageUrl={constructPicURL(
+                                            pokemon?.PokemonID,
+                                            pokemon?.SmogonName
+                                        )}
+                                        smogonUrl={constructSmogonURL(
+                                            pokemon?.Pokemon
+                                        )}
+                                        drafted={
+                                            pokemon?.CoachID ? true : false
+                                        }
+                                        color={color}
+                                    />
+                                </TableCell>
+                            </TableRow>
+                        ))}
                 </TableBody>
             </Table>
         </TableContainer>

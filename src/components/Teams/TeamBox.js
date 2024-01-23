@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react"
+import { useSelector, useDispatch } from "react-redux"
 import axios from "axios"
 import {
     Table,
@@ -13,43 +14,45 @@ import {
 import PokemonCard from "../TierList/PokemonCard"
 
 const TeamBox = ({ coach, color }) => {
+    const allPokemon = useSelector((state) => state.pokemon.allPokemon)
+
     const [pokemonData, setPokemonData] = useState([])
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const apiKey = process.env.REACT_APP_GOOGLE_SHEETS_API_KEY
-                const response = await axios.get(
-                    `https://sheets.googleapis.com/v4/spreadsheets/1E3wHnKj8i4C40Lj7SwKcVrbPhOFUdzNkJnpGuTwe73I/values/Data?key=${apiKey}`
-                )
-                const values = response.data.values
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const apiKey = process.env.REACT_APP_GOOGLE_SHEETS_API_KEY
+    //             const response = await axios.get(
+    //                 `https://sheets.googleapis.com/v4/spreadsheets/1E3wHnKj8i4C40Lj7SwKcVrbPhOFUdzNkJnpGuTwe73I/values/Data?key=${apiKey}`
+    //             )
+    //             const values = response.data.values
 
-                // Assuming the first row contains headers
-                const headers = values[0]
-                const data = values.slice(1)
+    //             // Assuming the first row contains headers
+    //             const headers = values[0]
+    //             const data = values.slice(1)
 
-                // Map the data before filtering and sorting
-                const mappedData = data.map((row) => {
-                    const pokemon = {}
-                    headers.forEach((header, index) => {
-                        pokemon[header] = row[index]
-                    })
-                    return pokemon
-                })
+    //             // Map the data before filtering and sorting
+    //             const mappedData = data.map((row) => {
+    //                 const pokemon = {}
+    //                 headers.forEach((header, index) => {
+    //                     pokemon[header] = row[index]
+    //                 })
+    //                 return pokemon
+    //             })
 
-                // Filter out rows with empty or non-numeric Pts values
-                const filteredData = mappedData.filter(
-                    (row) => row["Coach"] == coach
-                )
+    //             // Filter out rows with empty or non-numeric Pts values
+    //             const filteredData = mappedData.filter(
+    //                 (row) => row["Coach"] == coach
+    //             )
 
-                setPokemonData(filteredData)
-            } catch (error) {
-                console.error("Error fetching data from Google Sheets:", error)
-            }
-        }
+    //             setPokemonData(filteredData)
+    //         } catch (error) {
+    //             console.error("Error fetching data from Google Sheets:", error)
+    //         }
+    //     }
 
-        fetchData()
-    }, [coach])
+    //     fetchData()
+    // }, [coach])
 
     const constructSmogonURL = (pokemonName) => {
         const formattedName = pokemonName.toLowerCase().replace(" ", "-")

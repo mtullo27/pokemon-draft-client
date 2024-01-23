@@ -21,8 +21,6 @@ import TeamsPage from "./components/Teams/TeamsPage"
 import UserPage from "./components/User/UserPage"
 import LoginForm from "./components/Login/LoginForm"
 
-import PokemonTable from "./server/PokemonTable"
-
 import DashboardIcon from "@mui/icons-material/Dashboard"
 import HomeIcon from "@mui/icons-material/Home"
 import GroupIcon from "@mui/icons-material/Group"
@@ -156,7 +154,6 @@ function App() {
                         <Route path="/tiers" element={<PokemonTiersPage />} />
                         <Route path="/teams" element={<TeamsPage />} />
                         <Route path="/user" element={<UserPage />} />
-                        <Route path="/data" element={<PokemonTable />} />
                     </Routes>
                 </Box>
                 <LoginForm
