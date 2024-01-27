@@ -1,4 +1,8 @@
-import { GET_ALL_POKEMON, GET_POKMON_BY_TIER } from "../actions/types"
+import {
+    GET_ALL_POKEMON,
+    GET_POKMON_BY_TIER,
+    UPDATE_POKEMON
+} from "../actions/types"
 
 const initialState = {
     allPokemon: [],
@@ -11,6 +15,10 @@ const pokemonReducer = (state = initialState, action) => {
             return { ...state, allPokemon: action.payload }
         case GET_POKMON_BY_TIER:
             return { ...state, currentTier: action.payload }
+        case UPDATE_POKEMON:
+            return {
+                ...state
+            }
         default:
             return state
     }

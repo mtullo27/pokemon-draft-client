@@ -20,6 +20,7 @@ import PokemonTiersPage from "./components/TierList/PokemonTiersPage"
 import TeamsPage from "./components/Teams/TeamsPage"
 import UserPage from "./components/User/UserPage"
 import LoginForm from "./components/Login/LoginForm"
+import AdminShell from "./components/Admin/AdminShell"
 
 import DashboardIcon from "@mui/icons-material/Dashboard"
 import HomeIcon from "@mui/icons-material/Home"
@@ -145,6 +146,12 @@ function App() {
                             </ListItemIcon>
                             <ListItemText primary="Teams" />
                         </ListItem>
+                        <ListItem button component={Link} to="/admin">
+                            <ListItemIcon>
+                                <FormatListBulletedIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Admin" />
+                        </ListItem>
                     </List>
                 </Drawer>
 
@@ -154,6 +161,7 @@ function App() {
                         <Route path="/tiers" element={<PokemonTiersPage />} />
                         <Route path="/teams" element={<TeamsPage />} />
                         <Route path="/user" element={<UserPage />} />
+                        <Route path="/admin" element={<AdminShell />} />
                     </Routes>
                 </Box>
                 <LoginForm

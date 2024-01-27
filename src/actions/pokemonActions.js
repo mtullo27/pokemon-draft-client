@@ -1,5 +1,5 @@
 import axios from "axios"
-import { GET_ALL_POKEMON, GET_POKMON_BY_TIER } from "./types"
+import { GET_ALL_POKEMON, GET_POKMON_BY_TIER, UPDATE_POKEMON } from "./types"
 
 const backendURL = "http://localhost:5001"
 
@@ -18,9 +18,21 @@ export const getAllPokemon = () => async (dispatch) => {
 export const getPokemonByTier = (pts) => async (dispatch) => {
     try {
         const res = await axios.get(`${backendURL}/pokemon/pts/${pts}`)
-        console.log(res.data)
         dispatch({
             type: GET_POKMON_BY_TIER,
+            payload: res.data
+        })
+    } catch (error) {
+        console.error("Error fetching data from server:", error)
+    }
+}
+
+export const updatePokemon = (id, pokemon) => async (dispatch) => {
+    try {
+        console.log("pokemon", pokemon)
+        const res = await axios.put(`${backendURL}/pokemon/${id}`, pokemon)
+        dispatch({
+            type: UPDATE_POKEMON,
             payload: res.data
         })
     } catch (error) {
