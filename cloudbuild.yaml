@@ -2,16 +2,12 @@ steps:
     # Docker Build
     - name: "gcr.io/cloud-builders/docker"
       entrypoint: "bash"
-      args:
-          [
-              "-c",
-              "docker build -t gcr.io/precipart-dev-sandbox/pokemon-draft-client ."
-          ]
+      args: ["-c", "docker build -t gcr.io/mtullo27/pokemon-draft-client ."]
       secretEnv: ["REACT_APP_FIREBASE_APIKEY"]
 
     # Docker Push
     - name: "gcr.io/cloud-builders/docker"
-      args: ["push", "gcr.io/precipart-dev-sandbox/pokemon-draft-client"]
+      args: ["push", "gcr.io/mtullo27/pokemon-draft-client"]
 
     # Deploy container image to Cloud Run
     - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
@@ -22,7 +18,7 @@ steps:
               "deploy",
               "pokemon-draft-client",
               "--image",
-              "gcr.io/precipart-dev-sandbox/pokemon-draft-client",
+              "gcr.io/mtullo27/pokemon-draft-client",
               "--region",
               "us-east4"
           ]
