@@ -23,6 +23,7 @@ const PokemonTableRow = ({ pokemon, onSave }) => {
 
     const handleSave = () => {
         onSave(editedValues)
+        setPicURL(constructPicURL(editedValues.PokemonID, pokemon?.SmogonName))
     }
 
     return (

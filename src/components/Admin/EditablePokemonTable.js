@@ -49,7 +49,6 @@ const EditablePokemonTable = () => {
     }
 
     const handleSave = (id, editedPokemon) => {
-        console.log("editedPokemon", editedPokemon)
         dispatch(updatePokemon(id, editedPokemon))
         setEditedValues((prevValues) => ({
             ...prevValues,

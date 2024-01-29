@@ -1,0 +1,30 @@
+steps:
+    # Docker Build
+    - name: "gcr.io/cloud-builders/docker"
+      entrypoint: "bash"
+      args:
+          [
+              "-c",
+              "docker build -t gcr.io/precipart-dev-sandbox/pokemon-draft-client ."
+          ]
+      secretEnv: ["REACT_APP_FIREBASE_APIKEY"]
+
+    # Docker Push
+    - name: "gcr.io/cloud-builders/docker"
+      args: ["push", "gcr.io/precipart-dev-sandbox/pokemon-draft-client"]
+
+    # Deploy container image to Cloud Run
+    - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+      entrypoint: gcloud
+      args:
+          [
+              "run",
+              "deploy",
+              "pokemon-draft-client",
+              "--image",
+              "gcr.io/precipart-dev-sandbox/pokemon-draft-client",
+              "--region",
+              "us-east4"
+          ]
+
+timeout: 1200s
