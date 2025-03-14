@@ -12,7 +12,10 @@ const initialState = {
 const pokemonReducer = (state = initialState, action) => {
     switch (action.type) {
         case GET_ALL_POKEMON:
-            return { ...state, allPokemon: action.payload }
+            return {
+                ...state,
+                allPokemon: action.payload
+            }
         case GET_POKMON_BY_TIER:
             return { ...state, currentTier: action.payload }
         case UPDATE_POKEMON:
